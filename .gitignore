@@ -1,0 +1,23 @@
+# Sistema operacional
+.DS_Store
+Thumbs.db
+desktop.ini
+ 
+# Editores
+.vscode/
+.idea/
+*.swp
+*~
+ 
+# Dependências e builds (caso entrem no futuro)
+node_modules/
+dist/
+build/
+ 
+# Logs
+*.log
+npm-debug.log*
+ 
+# Variáveis de ambiente
+.env
+.env.*
