@@ -1,29 +1,309 @@
 <!DOCTYPE html>
+<!-- lang="pt-BR": avisa ao navegador e aos leitores de tela que a página é em português -->
 <html lang="pt-BR">
 <head>
+    <!-- Acentos e caracteres especiais aparecem certo -->
     <meta charset="UTF-8">
+    <!-- Faz a página se ajustar à largura do celular -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Orçamento | Faísca Orçamentos</title>
+
+    <!-- Bootstrap (mesma versão do index.html) -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Nosso CSS vem depois, para poder sobrescrever o Bootstrap -->
     <link rel="stylesheet" href="assets/css/style.css">
 </head>
 <body>
-    <header>
-        <!-- navegação / logo -->
+
+    <!-- ===================== MENU ===================== -->
+    <!-- Mesmo menu da página inicial; a marca leva de volta ao index -->
+    <header class="topo">
+        <nav class="container d-flex justify-content-between align-items-center py-3">
+            <a class="marca" href="index.html">⚡ Faísca</a>
+        </nav>
     </header>
 
-    <main>
-        <!-- formulário em etapas (wizard) -->
+    <!-- ===================== CONTEÚDO ===================== -->
+    <!-- container: centraliza | py-5: espaço vertical | max-width: formulário estreito é mais fácil de ler -->
+    <main class="container py-5" style="max-width: 720px">
+        <h1 class="h2 mb-4">Faça seu orçamento</h1>
+
+        <!-- ===== AVISO GERAL =====
+             Mensagens que valem para a página toda (ex: falha ao carregar os serviços).
+             role="alert" faz o leitor de tela anunciar a mensagem assim que ela aparece -->
+        <div class="alert alert-warning" id="aviso-geral" role="alert" hidden></div>
+
+        <!-- ===== BARRA DE PROGRESSO =====
+             Componente do Bootstrap. Os atributos aria-* informam o progresso para leitores de tela.
+             O wizard.js atualiza largura, texto e aria-valuenow a cada troca de etapa -->
+        <div class="progress mb-4" id="progresso" role="progressbar" aria-label="Progresso do orçamento"
+             aria-valuenow="1" aria-valuemin="1" aria-valuemax="6" style="height: 1.5rem">
+            <div class="progress-bar" id="barra-progresso" style="width: 16.66%">Etapa 1 de 6</div>
+        </div>
+
+        <!-- ===== FORMULÁRIO =====
+             novalidate: desliga a validação automática do navegador.
+             Fazemos a nossa no wizard.js, com mensagens em português -->
+        <form id="form-orcamento" novalidate>
+
+            <!-- ==========================================================
+                 ETAPA 1: TIPO DE SERVIÇO
+                 class="etapa": todas as etapas têm essa classe
+                 data-etapa: número que o wizard.js usa para mostrar/esconder
+                 ========================================================== -->
+            <section class="etapa" data-etapa="1">
+                <!-- tabindex="-1": permite que o JS mova o foco para o título ao trocar de etapa
+                     (quem usa leitor de tela fica sabendo em que etapa está) -->
+                <h2 class="h4 mb-3" tabindex="-1">Que tipo de serviço você precisa?</h2>
+
+                <!-- Os 3 radios têm o mesmo name="tipo", então só dá para marcar um.
+                     O value é o que vai para pedido.tipo -->
+                <div class="form-check mb-2">
+                    <input class="form-check-input" type="radio" name="tipo" id="tipo-instalacao" value="instalacao">
+                    <!-- for="..." liga o texto ao radio: clicar no texto também marca a opção -->
+                    <label class="form-check-label" for="tipo-instalacao">
+                        <strong>Instalação</strong> – colocar tomadas, chuveiro, luminárias e similares
+                    </label>
+                </div>
+
+                <div class="form-check mb-2">
+                    <input class="form-check-input" type="radio" name="tipo" id="tipo-manutencao" value="manutencao">
+                    <label class="form-check-label" for="tipo-manutencao">
+                        <strong>Manutenção ou reparo</strong> – consertar algo que parou de funcionar
+                    </label>
+                </div>
+
+                <div class="form-check mb-2">
+                    <input class="form-check-input" type="radio" name="tipo" id="tipo-projeto" value="projeto">
+                    <label class="form-check-label" for="tipo-projeto">
+                        <strong>Projeto ou reforma</strong> – instalação elétrica completa ou de vários cômodos
+                    </label>
+                </div>
+
+                <!-- Área de erro: vazia até a validação escrever algo -->
+                <p class="text-danger small mt-2 mb-0" id="erro-tipo"></p>
+            </section>
+
+            <!-- ==========================================================
+                 ETAPA 2: ITENS
+                 A lista é criada pelo wizard.js a partir do servicos.json.
+                 hidden: começa escondida; o JS mostra quando for a vez dela
+                 ========================================================== -->
+            <section class="etapa" data-etapa="2" hidden>
+                <h2 class="h4 mb-1" tabindex="-1">Quais serviços você precisa?</h2>
+                <p class="text-muted mb-3">Informe a quantidade de cada item. Deixe 0 no que não precisar.</p>
+
+                <!-- O JS cria aqui uma linha por serviço, neste modelo:
+                     <div class="item ..." data-id="tomada" data-nome="Tomada">
+                         <label for="qtd-tomada">Tomada</label>
+                         <input type="number" class="qtd" id="qtd-tomada" min="0" max="99" value="0">
+                     </div> -->
+                <div id="lista-itens">
+                    <p class="text-muted">Carregando serviços...</p>
+                </div>
+
+                <p class="text-danger small mt-2 mb-0" id="erro-itens"></p>
+            </section>
+
+            <!-- ==========================================================
+                 ETAPA 3: DETALHES
+                 Informações que mudam o preço: material e urgência
+                 ========================================================== -->
+            <section class="etapa" data-etapa="3" hidden>
+                <h2 class="h4 mb-3" tabindex="-1">Conte um pouco mais</h2>
+
+                <!-- ----- Tipo de imóvel (select = lista suspensa) ----- -->
+                <div class="mb-4">
+                    <label for="imovel" class="form-label fw-semibold">Tipo de imóvel</label>
+                    <select class="form-select" id="imovel" name="imovel">
+                        <!-- value="" vazio: obriga o cliente a escolher -->
+                        <option value="">Selecione...</option>
+                        <option value="casa">Casa</option>
+                        <option value="apartamento">Apartamento</option>
+                        <option value="comercio">Comércio</option>
+                    </select>
+                    <p class="text-danger small mt-1 mb-0" id="erro-imovel"></p>
+                </div>
+
+                <!-- ----- Material -----
+                     fieldset + legend: agrupa radios relacionados e dá um título ao grupo
+                     (é o jeito acessível de rotular um grupo de opções) -->
+                <fieldset class="mb-4">
+                    <legend class="form-label fw-semibold fs-6">Quem compra o material?</legend>
+                    <div class="form-check">
+                        <!-- checked: opção já marcada por padrão -->
+                        <input class="form-check-input" type="radio" name="material" id="material-cliente" value="cliente" checked>
+                        <label class="form-check-label" for="material-cliente">Eu compro o material</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="material" id="material-eletricista" value="eletricista">
+                        <label class="form-check-label" for="material-eletricista">O eletricista leva o material (tem acréscimo)</label>
+                    </div>
+                </fieldset>
+
+                <!-- ----- Urgência ----- -->
+                <fieldset class="mb-2">
+                    <legend class="form-label fw-semibold fs-6">Qual a urgência?</legend>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="urgencia" id="urgencia-normal" value="normal" checked>
+                        <label class="form-check-label" for="urgencia-normal">Normal – agendar nos próximos dias</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="urgencia" id="urgencia-emergencia" value="emergencia">
+                        <label class="form-check-label" for="urgencia-emergencia">Emergência – preciso hoje (valor maior)</label>
+                    </div>
+                </fieldset>
+            </section>
+
+            <!-- ==========================================================
+                 ETAPA 4: ENDEREÇO
+                 O CEP preenche rua, bairro, cidade e UF automaticamente (cep.js do Fábio).
+                 Os campos continuam editáveis caso a busca falhe
+                 ========================================================== -->
+            <section class="etapa" data-etapa="4" hidden>
+                <h2 class="h4 mb-3" tabindex="-1">Onde será o serviço?</h2>
+
+                <!-- row + g-3: grade do Bootstrap com espaço entre os campos.
+                     col-md-X: largura no computador; no celular cada campo ocupa a linha toda -->
+                <div class="row g-3">
+                    <div class="col-md-4">
+                        <label for="cep" class="form-label fw-semibold">CEP</label>
+                        <!-- inputmode="numeric": teclado numérico no celular
+                             autocomplete="postal-code": o navegador pode sugerir o CEP salvo
+                             maxlength="9": 8 números + o traço -->
+                        <input type="text" class="form-control" id="cep" inputmode="numeric"
+                               autocomplete="postal-code" maxlength="9" placeholder="00000-000">
+                        <!-- aria-live="polite": o leitor de tela lê o status ("Buscando...") quando ele muda -->
+                        <p class="small mt-1 mb-0" id="status-cep" aria-live="polite"></p>
+                        <p class="text-danger small mt-1 mb-0" id="erro-cep"></p>
+                    </div>
+
+                    <div class="col-md-8">
+                        <label for="rua" class="form-label fw-semibold">Rua</label>
+                        <input type="text" class="form-control" id="rua" autocomplete="address-line1">
+                        <p class="text-danger small mt-1 mb-0" id="erro-rua"></p>
+                    </div>
+
+                    <div class="col-md-4">
+                        <label for="numero" class="form-label fw-semibold">Número</label>
+                        <input type="text" class="form-control" id="numero">
+                        <p class="text-danger small mt-1 mb-0" id="erro-numero"></p>
+                    </div>
+
+                    <div class="col-md-8">
+                        <!-- text-muted dentro do label: indica que o campo é opcional -->
+                        <label for="complemento" class="form-label fw-semibold">
+                            Complemento <span class="text-muted fw-normal">(opcional)</span>
+                        </label>
+                        <input type="text" class="form-control" id="complemento" placeholder="Apto, bloco, ponto de referência">
+                    </div>
+
+                    <div class="col-md-5">
+                        <label for="bairro" class="form-label fw-semibold">Bairro</label>
+                        <input type="text" class="form-control" id="bairro">
+                        <p class="text-danger small mt-1 mb-0" id="erro-bairro"></p>
+                    </div>
+
+                    <div class="col-md-5">
+                        <label for="cidade" class="form-label fw-semibold">Cidade</label>
+                        <input type="text" class="form-control" id="cidade" autocomplete="address-level2">
+                        <p class="text-danger small mt-1 mb-0" id="erro-cidade"></p>
+                    </div>
+
+                    <div class="col-md-2">
+                        <label for="uf" class="form-label fw-semibold">UF</label>
+                        <!-- text-uppercase: mostra em maiúsculas (PB) -->
+                        <input type="text" class="form-control text-uppercase" id="uf" maxlength="2" autocomplete="address-level1">
+                    </div>
+                </div>
+            </section>
+
+            <!-- ==========================================================
+                 ETAPA 5: CONTATO
+                 ========================================================== -->
+            <section class="etapa" data-etapa="5" hidden>
+                <h2 class="h4 mb-3" tabindex="-1">Como falamos com você?</h2>
+
+                <div class="row g-3">
+                    <div class="col-md-7">
+                        <label for="nome" class="form-label fw-semibold">Nome</label>
+                        <input type="text" class="form-control" id="nome" autocomplete="name">
+                        <p class="text-danger small mt-1 mb-0" id="erro-nome"></p>
+                    </div>
+
+                    <div class="col-md-5">
+                        <label for="telefone" class="form-label fw-semibold">Telefone / WhatsApp</label>
+                        <!-- type="tel": teclado de telefone no celular -->
+                        <input type="tel" class="form-control" id="telefone" autocomplete="tel"
+                               maxlength="15" placeholder="(83) 99999-9999">
+                        <p class="text-danger small mt-1 mb-0" id="erro-telefone"></p>
+                    </div>
+
+                    <div class="col-md-7">
+                        <label for="horario" class="form-label fw-semibold">Melhor horário para contato</label>
+                        <select class="form-select" id="horario">
+                            <option value="Qualquer horário">Qualquer horário</option>
+                            <option value="Manhã">Manhã</option>
+                            <option value="Tarde">Tarde</option>
+                            <option value="Noite">Noite</option>
+                        </select>
+                    </div>
+
+                    <div class="col-12">
+                        <label for="observacoes" class="form-label fw-semibold">
+                            Observações <span class="text-muted fw-normal">(opcional)</span>
+                        </label>
+                        <!-- textarea: campo de várias linhas -->
+                        <textarea class="form-control" id="observacoes" rows="3"
+                                  placeholder="Descreva o problema ou algum detalhe importante"></textarea>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ==========================================================
+                 ETAPA 6: RESUMO
+                 Tudo aqui dentro é preenchido pelo wizard.js
+                 ========================================================== -->
+            <section class="etapa" data-etapa="6" hidden>
+                <h2 class="h4 mb-3" tabindex="-1">Confira seu pedido</h2>
+
+                <!-- Resumo dos dados preenchidos -->
+                <div id="resumo" class="mb-4"></div>
+
+                <!-- Valores calculados (calculo.js do Luiz) -->
+                <div id="resumo-valores" class="border rounded p-3 mb-3"></div>
+
+                <p class="small text-muted">
+                    Os valores são uma estimativa. O valor final é confirmado na visita técnica.
+                </p>
+
+                <!-- Botão final: monta o link do WhatsApp (whatsapp.js do Fábio) e abre a conversa -->
+                <button type="button" class="btn btn-faisca btn-lg w-100" id="btn-enviar">
+                    Enviar pelo WhatsApp
+                </button>
+                <p class="text-danger small mt-2 mb-0" id="erro-envio"></p>
+            </section>
+
+            <!-- ===================== BOTÕES DE NAVEGAÇÃO ===================== -->
+            <!-- d-flex + justify-content-between: Voltar na esquerda, Próximo na direita -->
+            <div class="d-flex justify-content-between mt-4">
+                <!-- type="button": sem isso, o clique enviaria o form e recarregaria a página.
+                     O Voltar começa escondido porque não existe etapa antes da 1 -->
+                <button type="button" class="btn btn-outline-secondary" id="btn-voltar" hidden>Voltar</button>
+                <!-- ms-auto: empurra o Próximo para a direita mesmo quando o Voltar está escondido -->
+                <button type="button" class="btn btn-faisca ms-auto" id="btn-proximo">Próximo</button>
+            </div>
+        </form>
     </main>
 
-    <footer>
-        <!-- rodapé -->
-    </footer>
-
+    <!-- ===================== SCRIPTS ===================== -->
+    <!-- Ficam no final para a página carregar antes do JavaScript -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Arquivos dos colegas: Luiz (cálculo) e Fábio (CEP e WhatsApp) -->
     <script src="assets/js/calculo.js"></script>
     <script src="assets/js/cep.js"></script>
     <script src="assets/js/whatsapp.js"></script>
+    <!-- wizard.js por último, porque ele usa as funções dos arquivos acima -->
     <script src="assets/js/wizard.js"></script>
 </body>
 </html>
