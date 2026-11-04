@@ -65,7 +65,7 @@ faisca-orcamentos/
 Não precisa instalar nada. Clone o repositório e abra com um servidor local (necessário para carregar o `servicos.json`):
 
 ```bash
-git clone https://github.com/eumarllonln/faisca-orcamentos.git
+git clone https://github.com/eumarllonlrn/faisca-orcamentos.git
 cd faisca-orcamentos
 
 # opção 1: extensão Live Server do VS Code
@@ -115,7 +115,7 @@ Os valores exibidos são **estimativas**. O valor final depende de visita técni
 
 | Nome | GitHub |
 |---|---|
-| Marllon Lorran | [@eumarllonln](https://github.com/eumarllonln) |
+| Marllon Lorran | [@eumarllonlrn](https://github.com/eumarllonlrn) |
 | Fábio Henrique | — |
 | Luiz Vinicius Brito Correia | — |
 | Pedro Henrique | — |
