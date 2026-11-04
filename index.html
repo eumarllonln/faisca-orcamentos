@@ -10,9 +10,30 @@
 <body>
     <header>
         <h1> 
-            site do orçamento
+            Site de orçamentos da empresa Faisca, aqui você pode solicitar orçamentos de serviços e produtos oferecidos pela empresa.
         </h1>
     </header>
+
+    <main>
+        <section>
+            <h2>Solicitar Orçamento</h2>
+            <form action="submit_orcamento.php" method="POST">
+                <label for="nome">Nome:</label>
+                <input type="text" id="nome" name="nome" required>
+
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="email" required>
+
+                <label for="servico">Serviço/Produto:</label>
+                <input type="text" id="servico" name="servico" required>
+
+                <label for="detalhes">Detalhes do Orçamento:</label>
+                <textarea id="detalhes" name="detalhes" required></textarea>
+
+                <button type="submit">Enviar Solicitação</button>
+            </form>
+        </section>
+    </main>
 </body>
 
 </html>
