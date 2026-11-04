@@ -77,7 +77,7 @@ Depois acesse `http://localhost:8000`.
 
 ## 🗺️ Roadmap
 
-- [ ] Setup do projeto
+- [x] Setup do projeto e estrutura de pastas
 - [ ] Landing page
 - [ ] Estrutura do wizard
 - [ ] Dados e cálculo
@@ -86,12 +86,36 @@ Depois acesse `http://localhost:8000`.
 - [ ] Polimento e responsividade
 - [ ] Deploy no GitHub Pages
 
+## 🤝 Como contribuir
+
+O projeto é feito em equipe, então seguimos algumas regras para não pisar no trabalho um do outro:
+
+1. **Nunca commitar direto na `main`.** Crie uma branch por tarefa:
+   ```bash
+   git checkout main
+   git pull
+   git checkout -b feat/landing-page
+   ```
+2. **Padrão de branch:** `feat/` (funcionalidade), `fix/` (correção), `docs/` (documentação), `refactor/` (reorganização).
+3. **Padrão de commit** ([Conventional Commits](https://www.conventionalcommits.org/pt-br/)), em português e dizendo o que mudou:
+   ```
+   feat: adiciona etapa de endereço no wizard
+   fix: corrige cálculo da taxa de urgência
+   style: ajusta espaçamento do formulário
+   docs: atualiza roadmap no README
+   ```
+4. **Abra um Pull Request** quando terminar. Outra pessoa da equipe revisa antes do merge.
+5. Antes de começar algo, **pegue uma issue** no GitHub para todo mundo saber quem está fazendo o quê.
+
 ## ⚠️ Aviso
 
 Os valores exibidos são **estimativas**. O valor final depende de visita técnica.
 
-## 👤 Autor
+## 👥 Equipe
 
-**Marllon Lorran**
-
-[LinkedIn](https://www.linkedin.com/in/eumarllonln/) · [GitHub](https://github.com/eumarllonln)
+| Nome | GitHub |
+|---|---|
+| Marllon Lorran | [@eumarllonln](https://github.com/eumarllonln) |
+| Fábio Henrique | — |
+| Luiz Vinicius Brito Correia | — |
+| Pedro Henrique | — |

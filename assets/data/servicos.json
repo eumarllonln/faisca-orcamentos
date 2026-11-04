@@ -1,0 +1,13 @@
+{
+  "whatsapp": "5583900000000",
+  "valorMinimoVisita": 0,
+  "multiplicadorUrgencia": 1.5,
+  "acrescimoMaterial": 0,
+  "servicos": [],
+  "deslocamento": {
+    "cidadeBase": "João Pessoa",
+    "bairros": {},
+    "padraoMesmaCidade": 0,
+    "outraCidade": 0
+  }
+}
