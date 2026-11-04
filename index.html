@@ -10,6 +10,25 @@
     <header>
         <h1> Site de orçamento da empresa Faisca </h1>
     </header> 
+    <main>
+        <section>
+            <h2> Solicite seu orçamento </h2>
+            <form action="processar_orcamento.php" method="POST">
+                <label for="nome">Nome:</label>
+                <input type="text" id="nome" name="nome" required><br><br>
+
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="email" required><br><br>
+
+                <label for="telefone">Telefone:</label>
+                <input type="tel" id="telefone" name="telefone"><br><br>
+
+                <label for="descricao">Descrição do serviço:</label><br>
+                <textarea id="descricao" name="descricao" rows="4" cols="50" required></textarea><br><br>
+
+                <input type="submit" value="Enviar Orçamento">
+            </form>
+    </main>
 </body>
 
 </html>
