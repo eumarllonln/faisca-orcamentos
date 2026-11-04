@@ -1,0 +1,371 @@
+/* ==========================================================
+   Faísca Orçamentos - identidade visual sobre o Bootstrap 5
+   ========================================================== */
+
+/* ---------- Variáveis (cores e fontes) ---------- */
+:root {
+    --laranja: #F97316;        /* destaque, botões */
+    --laranja-escuro: #C2410C; /* texto laranja sobre fundo claro (contraste) */
+    --grafite: #2B2D31;        /* fundo escuro e texto */
+    --grafite-claro: #3A3D44;  /* superfícies sobre o grafite */
+    --cinza: #F4F4F5;          /* seções claras */
+    --branco: #FFFFFF;
+    --texto-suave: #5B5E66;
+
+    --fonte: "Archivo", system-ui, -apple-system, "Segoe UI", sans-serif;
+    --raio: 6px;
+}
+
+/* ---------- Base ---------- */
+body {
+    font-family: var(--fonte);
+    color: var(--grafite);
+    background: var(--branco);
+    line-height: 1.6;
+}
+
+h1, h2, h3 {
+    font-family: var(--fonte);
+    font-stretch: 112%; /* Archivo mais larga nos títulos */
+    font-weight: 800;
+    line-height: 1.1;
+}
+
+p {
+    max-width: 65ch;
+}
+
+a {
+    color: var(--laranja-escuro);
+}
+
+/* Foco visível para quem navega pelo teclado */
+:focus-visible {
+    outline: 3px solid var(--laranja);
+    outline-offset: 3px;
+}
+
+/* Link de acessibilidade, aparece só ao receber foco */
+.pular-conteudo {
+    position: absolute;
+    left: -9999px;
+    top: 0;
+    z-index: 1000;
+    padding: .5rem 1rem;
+    background: var(--laranja);
+    color: var(--grafite);
+    font-weight: 700;
+}
+
+.pular-conteudo:focus {
+    left: 1rem;
+}
+
+/* ---------- Botões ---------- */
+.btn {
+    font-weight: 700;
+    border-radius: var(--raio);
+}
+
+/* Texto grafite no laranja: branco no laranja não passa no contraste */
+.btn-faisca {
+    background: var(--laranja);
+    border-color: var(--laranja);
+    color: var(--grafite);
+}
+
+.btn-faisca:hover,
+.btn-faisca:focus-visible {
+    background: #FB923C;
+    border-color: #FB923C;
+    color: var(--grafite);
+}
+
+.btn-contorno {
+    border: 2px solid var(--cinza);
+    color: var(--branco);
+}
+
+.btn-contorno:hover,
+.btn-contorno:focus-visible {
+    background: var(--cinza);
+    color: var(--grafite);
+}
+
+.btn-grafite {
+    background: var(--grafite);
+    border-color: var(--grafite);
+    color: var(--branco);
+}
+
+.btn-grafite:hover,
+.btn-grafite:focus-visible {
+    background: var(--grafite-claro);
+    border-color: var(--grafite-claro);
+    color: var(--branco);
+}
+
+/* ---------- Topo ---------- */
+.topo {
+    background: var(--grafite);
+}
+
+.marca {
+    font-weight: 800;
+    font-stretch: 112%;
+    font-size: 1.4rem;
+    color: var(--branco);
+}
+
+.marca-raio {
+    color: var(--laranja);
+}
+
+.topo .nav-link {
+    color: #D4D4D8;
+}
+
+.topo .nav-link:hover {
+    color: var(--branco);
+}
+
+/* ---------- Hero ---------- */
+.hero {
+    background: var(--grafite);
+    color: var(--branco);
+    padding: 4rem 0 5rem;
+}
+
+.hero-titulo {
+    font-size: clamp(2.4rem, 6vw, 4rem);
+    margin-bottom: 1.25rem;
+}
+
+.hero-texto {
+    font-size: 1.2rem;
+    color: #D4D4D8;
+    margin-bottom: 2rem;
+}
+
+.hero-nota {
+    margin-top: 1.25rem;
+    color: #A1A1AA;
+    font-size: .95rem;
+}
+
+/* ---------- Quadro de disjuntores (destaque da página) ---------- */
+.quadro {
+    margin: 0;
+    background: var(--cinza);
+    border: 10px solid #D4D4D8;
+    border-radius: 10px;
+    padding: 1.5rem;
+    box-shadow: inset 0 0 0 2px #A1A1AA;
+}
+
+.quadro-titulo {
+    color: var(--grafite);
+    font-weight: 700;
+    font-stretch: 112%;
+    margin-bottom: 1rem;
+    padding-bottom: .5rem;
+    border-bottom: 2px solid #D4D4D8;
+}
+
+.quadro-grade {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+}
+
+.disjuntor {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: .75rem;
+    padding: 1rem .5rem .75rem;
+    background: var(--branco);
+    border: 2px solid #D4D4D8;
+    border-radius: var(--raio);
+    color: var(--grafite);
+    cursor: pointer;
+}
+
+/* Trilho da alavanca */
+.alavanca {
+    position: relative;
+    width: 34px;
+    height: 64px;
+    background: var(--grafite);
+    border-radius: 4px;
+}
+
+/* A alavanca em si: em baixo = desligado */
+.alavanca::after {
+    content: "";
+    position: absolute;
+    left: 4px;
+    right: 4px;
+    top: 32px;
+    height: 28px;
+    background: #A1A1AA;
+    border-radius: 3px;
+    transition: top .18s ease, background-color .18s ease;
+}
+
+/* Ligado: alavanca em cima e laranja */
+.disjuntor.ligado .alavanca::after {
+    top: 4px;
+    background: var(--laranja);
+}
+
+.rotulo {
+    font-size: .9rem;
+    font-weight: 600;
+}
+
+/* ---------- Seções ---------- */
+.secao {
+    padding: 4.5rem 0;
+}
+
+.secao-clara {
+    background: var(--cinza);
+}
+
+.secao-titulo {
+    font-size: clamp(1.8rem, 4vw, 2.6rem);
+    margin-bottom: 2rem;
+}
+
+/* Como funciona */
+.passos {
+    list-style: none;
+    padding: 0;
+    counter-reset: passo;
+}
+
+.passos li {
+    counter-increment: passo;
+}
+
+.passos li::before {
+    content: counter(passo);
+    display: block;
+    font-size: 3rem;
+    font-weight: 800;
+    font-stretch: 125%;
+    color: var(--laranja-escuro);
+    line-height: 1;
+    margin-bottom: .5rem;
+}
+
+.passos h3 {
+    font-size: 1.3rem;
+}
+
+.passos p {
+    color: var(--texto-suave);
+}
+
+/* Serviços */
+.lista-servicos {
+    border-top: 2px solid var(--grafite);
+}
+
+.servico {
+    padding: 1.5rem 1.5rem 1.5rem 0;
+    border-bottom: 1px solid #D4D4D8;
+}
+
+.servico h3 {
+    font-size: 1.25rem;
+}
+
+.servico p {
+    margin-bottom: 0;
+    color: var(--texto-suave);
+}
+
+/* Bairros */
+.bairros {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: .5rem;
+}
+
+.bairros li {
+    padding: .4rem .9rem;
+    border: 2px solid var(--grafite);
+    border-radius: 999px;
+    font-weight: 600;
+}
+
+/* ---------- Chamada final ---------- */
+.chamada {
+    background: var(--laranja);
+    padding: 3rem 0;
+}
+
+.chamada-titulo {
+    color: var(--grafite);
+    font-size: clamp(1.6rem, 3.5vw, 2.2rem);
+    margin-bottom: 1.25rem;
+}
+
+@media (min-width: 768px) {
+    .chamada-titulo {
+        margin-bottom: 0;
+    }
+}
+
+/* ---------- Rodapé ---------- */
+.rodape {
+    background: var(--grafite);
+    color: #D4D4D8;
+    padding: 2.5rem 0;
+}
+
+.link-rodape {
+    color: var(--laranja);
+    font-weight: 700;
+}
+
+.link-rodape:hover {
+    color: #FB923C;
+}
+
+.rodape-aviso {
+    font-size: .85rem;
+    color: #A1A1AA;
+}
+
+/* ---------- Celular ---------- */
+@media (max-width: 575.98px) {
+    .hero {
+        padding: 2.5rem 0 3.5rem;
+    }
+
+    .quadro {
+        padding: 1rem;
+        border-width: 6px;
+    }
+
+    .quadro-grade {
+        gap: .6rem;
+    }
+
+    .servico {
+        padding-right: 0;
+    }
+}
+
+/* Respeita quem prefere menos animação */
+@media (prefers-reduced-motion: reduce) {
+    .alavanca::after {
+        transition: none;
+    }
+}
