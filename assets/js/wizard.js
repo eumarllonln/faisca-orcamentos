@@ -67,6 +67,12 @@ document.getElementById('btn-voltar').addEventListener('click', function () {
 
 // ===== BUSCAR CEP (usa a função do Fábio) =====
 document.getElementById('btn-cep').addEventListener('click', async function () {
+    // NOVO: se o cep.js do Fábio ainda não estiver pronto, avisa e para aqui
+    if (typeof buscarCep !== 'function') {
+        document.getElementById('erro').textContent = 'Busca de CEP ainda não disponível. Preencha o endereço manualmente.';
+        return;
+    }
+
     try {
         const endereco = await buscarCep(valor('cep')); // await: espera a resposta da internet
         document.getElementById('rua').value = endereco.rua;
@@ -128,6 +134,12 @@ function montarResumo() {
         ' - ' + pedido.endereco.bairro + ', ' + pedido.endereco.cidade + '</p>' +
         '<p><strong>Contato:</strong> ' + pedido.contato.nome + ' - ' + pedido.contato.telefone + '</p>';
 
+    // NOVO: se o calculo.js do Luiz ainda não estiver pronto, avisa e para aqui
+    if (typeof calcularOrcamento !== 'function') {
+        document.getElementById('total').textContent = 'Cálculo ainda não disponível.';
+        return;
+    }
+
     // Calcula o valor com a função do Luiz
     const resultado = calcularOrcamento(pedido, config);
     total = resultado.total;
@@ -137,6 +149,12 @@ function montarResumo() {
 
 // ===== ENVIAR PELO WHATSAPP (usa a função do Fábio) =====
 document.getElementById('btn-enviar').addEventListener('click', function () {
+    // NOVO: se o whatsapp.js do Fábio ainda não estiver pronto, avisa e para aqui
+    if (typeof gerarLinkWhatsApp !== 'function') {
+        document.getElementById('erro').textContent = 'Envio pelo WhatsApp ainda não disponível.';
+        return;
+    }
+
     const link = gerarLinkWhatsApp(montarPedido(), total, config.whatsapp);
     window.open(link, '_blank'); // abre o WhatsApp em outra aba
 });
