@@ -1,13 +1,15 @@
 {
   "whatsapp": "5583900000000",
-  "valorMinimoVisita": 0,
+  "valorMinimoVisita": 100,
   "multiplicadorUrgencia": 1.5,
-  "acrescimoMaterial": 0,
-  "servicos": [],
+  "acrescimoMaterial": 0.2,
+  "servicos": [ {"id": "tomada", "nome": "Tomada", "categoria": "Instalação", "preco": 20}, {"id": "fiação", "nome": "Fiação", "categoria": "Instalação/manutenção", "preco": 40}, {"id": "interruptor", "nome": "Interruptor", "categoria": "Instalação", "preco": 20}, {"id": "chuveiro", "nome": "Chuveiro", "categoria": "Instalação/Manutenção", "preco": 30}, {"id": "geral", "nome": "geral", "categoria": "Instalação", "preco": 150}, {"id": "iluminacao", "nome": "Iluminação", "categoria": "Instalação/manutenção", "preco": 35}],
+  
   "deslocamento": {
     "cidadeBase": "João Pessoa",
-    "bairros": {},
+    "bairros": { "Mangabeira": 15, "Bancarios": 15, "Valentina": 25, "Torre": 15, "Bairro Dos Estados": 20, "Castelo Branco": 10, "Mucumagro": 30, "Paratibe": 30, "alto do ceu": 25, "bessa": 20, "altiplano": 25, "manaira": 25, "gramame": 25, "gaisel": 20, "Padre zé": 20},
+
     "padraoMesmaCidade": 0,
-    "outraCidade": 0
+    "outraCidade": 60
   }
 }
